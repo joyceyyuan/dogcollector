@@ -38,3 +38,6 @@ class Walking(models.Model):
     def __str__(self):
         # obtaining the human readable value of a Field.choice ('Morning')
         return f"{self.get_schedule_display()} on {self.date}"
+    
+    class Meta:
+        ordering = ['-date']
