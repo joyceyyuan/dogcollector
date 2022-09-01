@@ -3,11 +3,25 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+
+class Treat(models.Model):
+    name = models.CharField(max_length=50)
+    brand = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('treats_detail', kwargs={'pk': self.id})
+
 class Dog(models.Model):
     name = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
     description = models.TextField(max_length=250)
     age = models.IntegerField()
+    # Add the M:M relationship
+    treats = models.ManyToManyField(Treat)
+    
     #this function will get called on a create or update on a Class Based View in order redirect the user
     def get_absolute_url(self):
         # detail is referring to the name of the route

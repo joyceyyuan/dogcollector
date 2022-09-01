@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Dog
+from django.views.generic import ListView, DetailView
+from .models import Dog, Treat
 from .forms import WalkingForm
-from django.http import HttpResponse
 
 
 # Define the home view
@@ -24,6 +24,13 @@ def dogs_detail(request, dog_id):
     # instantiate WalkingForm to be rendered in the template
     walking_form = WalkingForm()
     return render(request, 'dogs/detail.html', {'dog': dog, 'walking_form': walking_form})
+
+def assoc_treat(request, dog_id, treat_id):
+    dog = Dog.objects.get(id=dog_id)
+    dog.treats.add(treat_id)
+    # option 2
+    # dog.objects.get(id=dog_id).toys.add(toy_id)
+    return redirect('detail', dog_id=dog_id)
 
 class DogCreate(CreateView):
     model = Dog
@@ -50,3 +57,25 @@ def add_walking(request, dog_id):
         new_walking.save()  # saves the walking to the database!
     # import redirect at the top
     return redirect('detail', dog_id=dog_id) #can be shorten as redirect('detail', dog_id)
+
+class TreatList(ListView):
+    model = Treat
+
+
+class TreatDetail(DetailView):
+    model = Treat
+
+
+class TreatCreate(CreateView):
+    model = Treat
+    fields = '__all__'
+
+
+class TreatUpdate(UpdateView):
+    model = Treat
+    fields = ['name', 'brand']
+
+
+class TreatDelete(DeleteView):
+    model = Treat
+    success_url = '/treats/'
