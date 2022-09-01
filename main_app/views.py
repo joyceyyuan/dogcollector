@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Dog
 from .forms import WalkingForm
@@ -36,4 +36,17 @@ class DogUpdate(UpdateView):
 
 class DogDelete(DeleteView):
     model = Dog
-    success_url = '/dogs/' # if we delete a cat, we'll need to redirect to the cats index page since that cat doesn't exist anymore.,
+    success_url = '/dogs/' # if we delete a dog, we'll need to redirect to the dogs index page since that dog doesn't exist anymore.,
+
+def add_walking(request, dog_id):
+    # we need to create a modelForm instance using the data from request.POST
+    form = WalkingForm(request.POST)
+    # validate the form, so make sure the inputs are of the correct type and shape
+    if form.is_valid():
+        # were creating an object to save to the database, but don't save yet, because
+        # we need to add dog_id
+        new_walking = form.save(commit=False)
+        new_walking.dog_id = dog_id
+        new_walking.save()  # saves the walking to the database!
+    # import redirect at the top
+    return redirect('detail', dog_id=dog_id) #can be shorten as redirect('detail', dog_id)
