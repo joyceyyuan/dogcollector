@@ -21,15 +21,20 @@ def dogs_index(request):
 # Define the detail view
 def dogs_detail(request, dog_id):
     dog = Dog.objects.get(id = dog_id)
+    # we want to find the treats that don't belong to the dog!
+    # id__in syntax is what call field lookups, get, exclude, or filter
+    treats_dog_doesnt_have = Treat.objects.exclude(
+        id__in=dog.treats.all().values_list('id'))
+
     # instantiate WalkingForm to be rendered in the template
     walking_form = WalkingForm()
-    return render(request, 'dogs/detail.html', {'dog': dog, 'walking_form': walking_form})
+    return render(request, 'dogs/detail.html', {'dog': dog, 'walking_form': walking_form,'treats': treats_dog_doesnt_have})
 
 def assoc_treat(request, dog_id, treat_id):
     dog = Dog.objects.get(id=dog_id)
     dog.treats.add(treat_id)
     # option 2
-    # dog.objects.get(id=dog_id).toys.add(toy_id)
+    # dog.objects.get(id=dog_id).treats.add(toy_id)
     return redirect('detail', dog_id=dog_id)
 
 class DogCreate(CreateView):
