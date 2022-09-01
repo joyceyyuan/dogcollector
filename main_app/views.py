@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Dog
 from django.http import HttpResponse
 
@@ -22,3 +22,12 @@ def dogs_detail(request, dog_id):
 class DogCreate(CreateView):
     model = Dog
     fields = '__all__'
+
+class DogUpdate(UpdateView):
+    model = Dog 
+    # exclude the name from update  
+    fields = ['breed', 'description', 'age'] 
+
+class DogDelete(DeleteView):
+    model = Dog
+    success_url = '/dogs/' # if we delete a cat, we'll need to redirect to the cats index page since that cat doesn't exist anymore.,
