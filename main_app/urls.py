@@ -15,6 +15,7 @@ urlpatterns = [
     path('dogs/<int:pk>/update/', views.DogUpdate.as_view(), name='dogs_update'),
     path('dogs/<int:pk>/delete/', views.DogDelete.as_view(), name='dogs_delete'),
     path('dogs/<int:dog_id>/add_walking/', views.add_walking, name='add_walking'),
+    # associate a treat with a dog (M:M)
     path('dogs/<int:dog_id>/assoc_treat/<int:treat_id>/', views.assoc_treat, name='assoc_treat'),
     path('treats/', views.TreatList.as_view(), name='treats_index'),
     path('treats/<int:pk>/', views.TreatDetail.as_view(), name='treats_detail'),
