@@ -34,7 +34,14 @@ def assoc_treat(request, dog_id, treat_id):
     dog = Dog.objects.get(id=dog_id)
     dog.treats.add(treat_id)
     # option 2
-    # dog.objects.get(id=dog_id).treats.add(toy_id)
+    # Dog.objects.get(id=dog_id).treats.add(treat_id)
+    return redirect('detail', dog_id=dog_id)
+
+def remove_treat(request, dog_id, treat_id):
+    dog = Dog.objects.get(id=dog_id)
+    dog.treats.remove(treat_id)
+    # option 2
+    # Dog.objects.get(id=dog_id).treats.remove(treat_id)
     return redirect('detail', dog_id=dog_id)
 
 class DogCreate(CreateView):
